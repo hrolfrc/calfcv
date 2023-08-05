@@ -1,12 +1,12 @@
 import pytest
 from sklearn.utils.estimator_checks import check_estimator
 
-from sppam.sppam import SPPAM
+from calfcv.calfcv import Calf, CalfCV
 
 
 @pytest.mark.parametrize(
     "estimator",
-    [SPPAM()]
+    [Calf(), CalfCV()]
 )
 def test_all_estimators(estimator):
     return check_estimator(estimator)

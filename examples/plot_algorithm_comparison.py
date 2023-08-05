@@ -1,10 +1,10 @@
 """
 
 ===========================
-SPPAM comparison plot
+CalfCV comparison plot
 ===========================
 
-A classifier comparison plot including :class:`SPPAM`
+A classifier comparison plot including :class:`CalfCV`
 """
 import warnings
 
@@ -20,7 +20,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
-from sppam import SPPAM
+from calfcv import Calf, CalfCV
 
 warnings.filterwarnings("ignore")
 
@@ -38,9 +38,10 @@ X = scaler.fit_transform(X)
 
 # Models to be compared
 # ElasticNetCV and LassoCV are expected to fail using the accuracy metric
-# Here we show the versatility of CalfCV under both accuracy and auc
+# Here we show the versatility of Calf and CalfCV under both accuracy and auc
 models = [
-    ('SPPAM', SPPAM()),
+    ('CalfCV', Calf()),
+    ('CalfCV', CalfCV()),
     ('EN', ElasticNetCV()),
     ('LCV', LassoCV()),
     ('LR', LogisticRegression()),

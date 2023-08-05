@@ -1,10 +1,10 @@
 ####################
-SPPAM API
+CalfCV API
 ####################
 
-The SPPAM (Saddle Point Problem for AUC Maximization) API
+The CalfCV (Saddle Point Problem for AUC Maximization) API
 
-.. currentmodule:: sppam
+.. currentmodule:: calfcv
 
 
 Classifier
@@ -14,4 +14,4 @@ Classifier
    :toctree: generated/
    :template: class.rst
 
-    SPPAM
+    CalfCV

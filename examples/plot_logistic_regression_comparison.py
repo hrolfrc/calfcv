@@ -1,10 +1,10 @@
 """
 
 ======================================
-Compare SPPAM with LogisticRegression
+Compare CalfCV with LogisticRegression
 ======================================
 
-A comparison of LogisticRegression and :class:`SPPAM`
+A comparison of LogisticRegression and :class:`CalfCV`
 """
 
 import numpy as np
@@ -15,12 +15,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score
 from sklearn.preprocessing import StandardScaler
 
-from sppam import SPPAM
+from calfcv import CalfCV
 
 logit_auc = []
 logit_acc = []
-sppam_auc = []
-sppam_acc = []
+score_regression_auc = []
+score_regression_acc = []
 
 rng = np.random.RandomState(11)
 for _ in range(20):
@@ -37,32 +37,34 @@ for _ in range(20):
     scaler = StandardScaler()
     X_d = scaler.fit_transform(X)
 
-    for desc, clf in [('logit', LogisticRegression(max_iter=10000)), ('SPPAM', SPPAM())]:
+    for desc, clf in [('Logit', LogisticRegression(max_iter=10000)), ('CalfCV', CalfCV())]:
         lp = clf.fit(X_d, y_d).predict_proba(X_d)
         auc = roc_auc_score(y_true=y_d, y_score=clf.fit(X_d, y_d).predict_proba(X_d)[:, 1])
         acc = accuracy_score(y_true=y_d, y_pred=clf.fit(X_d, y_d).predict(X_d))
         print(desc, np.round((auc, acc), 2))
-        if desc == 'logit':
+        if desc == 'Logit':
             logit_auc.append(auc)
             logit_acc.append(acc)
         else:
-            sppam_auc.append(auc)
-            sppam_acc.append(acc)
+            score_regression_auc.append(auc)
+            score_regression_acc.append(acc)
 
 # compare the mean of the differences of auc
-diff = np.subtract(logit_auc, sppam_auc)
+diff = np.subtract(logit_auc, score_regression_auc)
+df_describe = pd.DataFrame(diff)
+print(df_describe.describe())
 
 # plot the results
 fig, axs = plt.subplots(3, 1, layout='constrained')
 xdata = np.arange(len(logit_acc))  # make an ordinal for this
 axs[0].plot(xdata, logit_auc, label='LogisticRegression')
-axs[0].plot(xdata, sppam_auc, label='SPPAM')
-axs[0].set_title('Comparison of SPPAM and LogisticRegression')
+axs[0].plot(xdata, score_regression_auc, label='ScoreRegression')
+axs[0].set_title('Comparison of ScoreRegression and LogisticRegression')
 axs[0].set_ylabel('AUC')
 axs[0].legend()
 
 axs[1].plot(xdata, logit_acc, label='LogisticRegression')
-axs[1].plot(xdata, sppam_acc, label='SPPAM')
+axs[1].plot(xdata, score_regression_acc, label='ScoreRegression')
 axs[1].set_ylabel('Accuracy')
 axs[1].legend()
 

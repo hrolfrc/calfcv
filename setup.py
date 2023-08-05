@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""The sppam package setup file.
+"""The calfcv package setup file.
 
 Directions
 
@@ -19,7 +19,7 @@ Directions
 
 4.  Remove the old distribution: rm -r dist
 
-5. cd to sppam and build the new dist folder:
+5. cd to calfcv and build the new dist folder:
 python setup.py sdist bdist_wheel
 
 Note that setup is deprecated and a replacement method is needed.
@@ -34,23 +34,22 @@ import codecs
 from setuptools import find_packages, setup
 
 # noinspection PyProtectedMember
-from sppam import _version
+from calfcv import _version
 
-DISTNAME = 'sppam'
-DESCRIPTION = 'A classifier that endeavors to solve the saddle point problem for AUC maximization.'
+DISTNAME = 'calfcv'
+DESCRIPTION = 'Coarse approximation linear function with cross validation'
 with codecs.open('README.rst', encoding='utf-8-sig') as f:
     LONG_DESCRIPTION = f.read()
 MAINTAINER = 'Carlson Research, LLC'
 MAINTAINER_EMAIL = 'hrolfrc@gmail.com'
-URL = 'https://github.com/hrolfrc/sppam'
+URL = 'https://github.com/hrolfrc/calfcv'
 LICENSE = 'new BSD'
-DOWNLOAD_URL = 'https://github.com/hrolfrc/sppam'
+DOWNLOAD_URL = 'https://github.com/hrolfrc/calfcv'
 VERSION = _version.__version__
 INSTALL_REQUIRES = ['numpy', 'scipy', 'scikit-learn']
 CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Intended Audience :: Developers',
                'Topic :: Scientific/Engineering :: Artificial Intelligence',
-               'Topic :: Scientific/Engineering :: Mathematics',
                'Development Status :: 2 - Pre-Alpha',
                'License :: OSI Approved',
                'Topic :: Scientific/Engineering',

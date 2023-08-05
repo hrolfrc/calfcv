@@ -3,16 +3,15 @@
 Decision boundaries
 ==========================================
 
-We can `compare`_ SPPAM with the nearest neighbor and linear SVM classifiers.
+We can `compare`_ CalfCV with the nearest neighbor and linear SVM classifiers.
 The comparisons are on synthetic data sets to help gain intuition for the decision
-boundaries formed by SPPAM on several data challenges.
+boundaries formed by CalfCV on several data challenges.
 
 .. _compare: https://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html
 
-The example plot of :class:`SPPAM` shows that while
-nearest neighbors does better than SLP on all three data sets, SLP is
-competitive with linear SVM on the moons and circles data sets.  The decision boundaries
-for SPPAM look similar to linear SVM.
+The example plot of :class:`CalfCV` shows that while
+nearest neighbors does better than CalfCV on all three data sets, CalfCV is
+competitive with linear SVM on the moons and circles data sets.
 
 """
 
@@ -27,17 +26,17 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from sppam import SPPAM
+from calfcv import CalfCV
 
 names = [
-    "SPPAM",
+    "CalfCV",
     "Linear SVM",
     "Nearest Neighbors"
 ]
 
 classifiers = [
 
-    SPPAM(),
+    CalfCV(),
     SVC(kernel="linear", C=0.025),
     KNeighborsClassifier(3)
 ]

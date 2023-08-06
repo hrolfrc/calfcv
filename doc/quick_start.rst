@@ -4,7 +4,7 @@ Quick Start
 
 CalfCV performs binomial classification.
 
-Quick Start
+Example
 ===========
 
 .. code:: ipython2
@@ -12,14 +12,15 @@ Quick Start
     from calfcv import CalfCV
     from sklearn.datasets import make_classification
     from sklearn.model_selection import train_test_split
-    from sklearn.metrics import roc_auc_score
-    import numpy as np
+
+Make a classification problem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython2
 
-    seed = 43
+    seed = 42
     X, y = make_classification(
-        n_samples=100,
+        n_samples=30,
         n_features=5,
         n_informative=2,
         n_redundant=2,
@@ -47,4 +48,4 @@ Get the score on unseen data
 
 .. parsed-literal::
 
-    0.88
+    0.875

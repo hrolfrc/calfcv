@@ -18,7 +18,7 @@ Make a classification problem
 
 .. code:: ipython2
 
-    seed = 43
+    seed = 45
     X, y = make_classification(
         n_samples=100,
         n_features=5,
@@ -36,8 +36,8 @@ Train the classifier
 
     cls = CalfCV().fit(X_train, y_train)
 
-Get the score on unseen data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Get the score for class prediction on unseen data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython2
 
@@ -48,7 +48,7 @@ Get the score on unseen data
 
 .. parsed-literal::
 
-    0.88
+    0.92
 
 
 
@@ -67,9 +67,9 @@ of class 1 on the bottom. The first five entries are shown.
 
 .. parsed-literal::
 
-    array([[0.  , 1.  , 1.  , 0.  , 0.  ],
-           [0.65, 0.39, 0.3 , 0.96, 0.83],
-           [0.35, 0.61, 0.7 , 0.04, 0.17]])
+    array([[1.  , 1.  , 0.  , 0.  , 0.  ],
+           [0.21, 0.46, 1.  , 0.8 , 0.71],
+           [0.79, 0.54, 0.  , 0.2 , 0.29]])
 
 
 
@@ -82,7 +82,7 @@ of class 1 on the bottom. The first five entries are shown.
 
 .. parsed-literal::
 
-    0.9544159544159544
+    0.9722617354196301
 
 
 
@@ -102,8 +102,8 @@ The first column is the index. The first five entries are shown.
 
 .. parsed-literal::
 
-    array([[1, 0, 0, 0, 1],
-           [1, 0, 0, 0, 1]])
+    array([[0, 0, 0, 1, 0],
+           [0, 0, 0, 1, 0]])
 
 
 
@@ -118,6 +118,6 @@ The class prediction is expected to be lower than the auc prediction.
 
 .. parsed-literal::
 
-    0.8733766233766235
+    0.9198717948717948
 
 

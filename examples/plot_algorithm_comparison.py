@@ -4,7 +4,9 @@
 CalfCV comparison plot
 ===========================
 
-A classifier comparison plot including :class:`CalfCV`
+A classifier comparison plot including :class:`Calf` and :class:`CalfCV`,
+
+
 """
 import warnings
 
@@ -26,7 +28,7 @@ warnings.filterwarnings("ignore")
 
 # Make a classification problem
 X, y = make_classification(
-    n_samples=100,
+    n_samples=200,
     n_features=20,
     n_informative=10,
     n_redundant=5,
@@ -38,9 +40,9 @@ X = scaler.fit_transform(X)
 
 # Models to be compared
 # ElasticNetCV and LassoCV are expected to fail using the accuracy metric
-# Here we show the versatility of Calf and CalfCV under both accuracy and auc
+# Here we show the versatility of Calf and CalfCV under both accuracy and auc.
 models = [
-    ('CalfCV', Calf()),
+    ('Calf', Calf()),
     ('CalfCV', CalfCV()),
     ('EN', ElasticNetCV()),
     ('LCV', LassoCV()),
@@ -64,8 +66,6 @@ for score, ax in plot_info:
     for name, model in models:
         cv_results = cross_val_score(model, X, y, cv=kfold, scoring=score)
         results.append(cv_results)
-        msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
-        print(msg)
         ax.boxplot(results)
         ax.set_ylabel(score)
 

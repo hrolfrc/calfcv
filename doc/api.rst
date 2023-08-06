@@ -2,12 +2,12 @@
 CalfCV API
 ####################
 
-The CalfCV (Saddle Point Problem for AUC Maximization) API
+The CalfCV and Calf classifiers
 
 .. currentmodule:: calfcv
 
 
-Classifier
+CalfCV
 ==========
 
 .. autosummary::
@@ -15,3 +15,12 @@ Classifier
    :template: class.rst
 
     CalfCV
+
+Calf
+==========
+
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
+
+    Calf

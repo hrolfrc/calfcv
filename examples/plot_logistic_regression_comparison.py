@@ -37,7 +37,7 @@ for _ in range(20):
     scaler = StandardScaler()
     X_d = scaler.fit_transform(X)
 
-    for desc, clf in [('Logit', LogisticRegression(max_iter=10000)), ('CalfCV', CalfCV())]:
+    for desc, clf in [('Logit', LogisticRegression()), ('CalfCV', CalfCV())]:
         lp = clf.fit(X_d, y_d).predict_proba(X_d)
         auc = roc_auc_score(y_true=y_d, y_score=clf.fit(X_d, y_d).predict_proba(X_d)[:, 1])
         acc = accuracy_score(y_true=y_d, y_pred=clf.fit(X_d, y_d).predict(X_d))

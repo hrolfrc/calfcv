@@ -1,33 +1,41 @@
 """
 
-======================================
-Compare CalfCV with LogisticRegression
-======================================
+================================================
+Compare Calf with LogisticRegression
+================================================
 
-A comparison of LogisticRegression and :class:`CalfCV`
+A comparison of LogisticRegression with and :class:`Calf`.
+
 """
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.datasets import make_classification
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegressionCV
 from sklearn.metrics import accuracy_score, roc_auc_score
 from sklearn.preprocessing import StandardScaler
 
-from calfcv import CalfCV
+from calfcv import Calf
 
-logit_auc = []
-logit_acc = []
-score_regression_auc = []
-score_regression_acc = []
+
+methods = [
+    ('Logit', LogisticRegressionCV()),
+    ('Calf', Calf())
+]
+
+score = {}
+for desc, _ in methods:
+    score[desc] = {}
+    score[desc]['AUC'] = []
+    score[desc]['Accuracy'] = []
 
 rng = np.random.RandomState(11)
 for _ in range(20):
     # Make a classification problem
     X, y_d = make_classification(
-        n_samples=100,
-        n_features=20,
+        n_samples=300,
+        n_features=40,
         n_informative=10,
         n_redundant=5,
         n_classes=2,
@@ -37,34 +45,29 @@ for _ in range(20):
     scaler = StandardScaler()
     X_d = scaler.fit_transform(X)
 
-    for desc, clf in [('Logit', LogisticRegression()), ('CalfCV', CalfCV())]:
+    for desc, clf in methods:
         lp = clf.fit(X_d, y_d).predict_proba(X_d)
         auc = roc_auc_score(y_true=y_d, y_score=clf.fit(X_d, y_d).predict_proba(X_d)[:, 1])
         acc = accuracy_score(y_true=y_d, y_pred=clf.fit(X_d, y_d).predict(X_d))
-        print(desc, np.round((auc, acc), 2))
-        if desc == 'Logit':
-            logit_auc.append(auc)
-            logit_acc.append(acc)
-        else:
-            score_regression_auc.append(auc)
-            score_regression_acc.append(acc)
+        score[desc]['AUC'].append(auc)
+        score[desc]['Accuracy'].append(acc)
 
 # compare the mean of the differences of auc
-diff = np.subtract(logit_auc, score_regression_auc)
+diff = np.subtract(score['Logit']['AUC'], score['Calf']['AUC'])
 df_describe = pd.DataFrame(diff)
 print(df_describe.describe())
 
 # plot the results
 fig, axs = plt.subplots(3, 1, layout='constrained')
-xdata = np.arange(len(logit_acc))  # make an ordinal for this
-axs[0].plot(xdata, logit_auc, label='LogisticRegression')
-axs[0].plot(xdata, score_regression_auc, label='ScoreRegression')
-axs[0].set_title('Comparison of ScoreRegression and LogisticRegression')
+xdata = np.arange(len(score['Logit']['AUC']))
+axs[0].plot(xdata, score['Logit']['AUC'], label='LogisticRegressionCV')
+axs[0].plot(xdata, score['Calf']['AUC'], label='Calf')
+axs[0].set_title('Comparison of Calf and LogisticRegressionCV')
 axs[0].set_ylabel('AUC')
 axs[0].legend()
 
-axs[1].plot(xdata, logit_acc, label='LogisticRegression')
-axs[1].plot(xdata, score_regression_acc, label='ScoreRegression')
+axs[1].plot(xdata, score['Logit']['Accuracy'], label='LogisticRegressionCV')
+axs[1].plot(xdata, score['Calf']['Accuracy'], label='Calf')
 axs[1].set_ylabel('Accuracy')
 axs[1].legend()
 

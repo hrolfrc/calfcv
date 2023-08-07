@@ -185,6 +185,7 @@ class Calf(ClassifierMixin, BaseEstimator):
         """
 
     def __init__(self, grid=(-1, 1), verbose=0):
+        """ Initialize Calf"""
         self.grid = [grid] if isinstance(grid, int) else grid
         self.verbose = verbose if isinstance(verbose, int) and verbose in [0, 1, 2, 3] else 0
 
@@ -384,6 +385,7 @@ class CalfCV(ClassifierMixin, BaseEstimator):
     """
 
     def __init__(self, grid=(-1, 1), verbose=0):
+        """ Initialize CalfCV"""
         self.grid = [grid] if isinstance(grid, int) else grid
         self.verbose = verbose if isinstance(verbose, int) and verbose in [0, 1, 2, 3] else 0
 

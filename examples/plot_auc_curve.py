@@ -5,6 +5,8 @@ Plot the AUC curve
 
 An example plot of the auc as a function of features
 curve for :class:`CalfCV` on the breast cancer dataset.
+When a feature is considered and the auc declines, that feature is dismissed by receiving
+a weight of zero. The labels above the plot line are the feature weights.
 
 """
 import matplotlib.pyplot as plt

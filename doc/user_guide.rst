@@ -89,8 +89,8 @@ of class 1 on the bottom. The first five entries are shown.
 Predict the classes
 ^^^^^^^^^^^^^^^^^^^
 
-The ground truth is on the top and the predicted class is on the bottom.
-The first column is the index. The first five entries are shown.
+The ground truth is on the top and the predicted classes are on the bottom.
+The first five entries are shown.
 
 .. code:: ipython2
 

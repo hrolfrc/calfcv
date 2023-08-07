@@ -26,7 +26,6 @@ jobs:
       - store_artifacts:
           path: ~/log.txt
       - run: ls -ltrh doc/_build/html
-
   test_pypi_publish:
     docker:
       - image: cimg/python:3.11.0
@@ -62,14 +61,6 @@ workflows:
       - test_pypi_publish:
           requires:
             - build_test
-          filters:
-            branches:
-              only:
-                - develop
       - pypi_publish:
           requires:
             - build_test
-          filters:
-            branches:
-              only:
-                - main

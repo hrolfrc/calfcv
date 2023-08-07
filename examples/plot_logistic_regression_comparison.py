@@ -41,7 +41,7 @@ rng = np.random.RandomState(11)
 for _ in range(20):
     # Make a classification problem
     X, y_d = make_classification(
-        n_samples=300,
+        n_samples=200,
         n_features=40,
         n_informative=10,
         n_redundant=5,

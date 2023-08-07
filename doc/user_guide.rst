@@ -1,20 +1,20 @@
 .. title:: User guide : contents
 
 .. _user_guide:
-
 User Guide
 ==========
 
 Make a classification problem
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 .. code:: ipython2
 
-    from calfcv import CalfCV
     from sklearn.datasets import make_classification
     from sklearn.model_selection import train_test_split
-    from sklearn.metrics import roc_auc_score
     import numpy as np
+    import pandas as pd
+    from sklearn.metrics import roc_auc_score
+    from calfcv import CalfCV
 
 .. code:: ipython2
 
@@ -30,7 +30,7 @@ Make a classification problem
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=seed)
 
 Train the classifier
-^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~
 
 .. code:: ipython2
 
@@ -89,8 +89,8 @@ of class 1 on the bottom. The first five entries are shown.
 Predict the classes
 ^^^^^^^^^^^^^^^^^^^
 
-The ground truth is on the top and the predicted classes are on the bottom.
-The first five entries are shown.
+The ground truth is on the top and the predicted classes are on the
+bottom. The first five entries are shown.
 
 .. code:: ipython2
 
@@ -119,5 +119,128 @@ The class prediction is expected to be lower than the auc prediction.
 .. parsed-literal::
 
     0.9198717948717948
+
+
+
+Reproduce the AUC from example of the Calf paper [1]
+----------------------------------------------------
+
+While calfpy yields an auc of 0.875 in example 1 from the paper, calfcv
+produces an auc of 0.9796875.
+
+=========== References:
+
+Jeffries, C.D., Ford, J.R., Tilson, J.L. et al. A greedy regression
+algorithm with coarse weights offers novel advantages. Sci Rep 12, 5440
+(2022). https://doi.org/10.1038/s41598-022-09415-2
+
+.. code:: ipython2
+
+    input_file = "../../data/n2.csv"
+    df = pd.read_csv(input_file, header=0, sep=",")
+
+    # The input data is everything except the first column
+    X = df.loc[:, df.columns != 'ctrl/case']
+    # The outcome or diagnoses are in the first ctrl/case column
+    Y = df['ctrl/case']
+
+    # The header row is the feature set
+    features = list(X.columns)
+
+    # label the outcomes
+    Y_names = Y.replace({0: 'non_psychotic', 1: 'pre_psychotic'})
+
+    # glmnet requires float64
+    x = X.to_numpy(dtype='float64')
+    y = Y.to_numpy(dtype='float64')
+
+
+Features
+~~~~~~~~
+
+Here we look at the feature names, number of features, shape, category
+balance, and probability of choosing the positive category by chance.
+
+.. code:: ipython2
+
+    features[0:5]
+
+
+
+
+.. parsed-literal::
+
+    ['ADIPOQ', 'SERPINA3', 'AMBP', 'A2M', 'ACE']
+
+
+
+.. code:: ipython2
+
+    x.size
+
+
+
+
+.. parsed-literal::
+
+    9720
+
+
+
+.. code:: ipython2
+
+    x.shape
+
+
+
+
+.. parsed-literal::
+
+    (72, 135)
+
+
+
+Category Balance
+~~~~~~~~~~~~~~~~
+
+.. code:: ipython2
+
+    print(list(Y).count(1), list(Y).count(0))
+
+
+.. parsed-literal::
+
+    32 40
+
+
+.. code:: ipython2
+
+    len(y)
+
+
+
+
+.. parsed-literal::
+
+    72
+
+
+
+AUC improvement
+~~~~~~~~~~~~~~~
+
+CalfCV improves on the calfpy auc of 0.875 from example 1 of the paper.
+
+.. code:: ipython2
+
+    y_pred = CalfCV().fit(x, y).predict_proba(x)
+    roc_auc_score(y, y_pred[:, 1])
+
+
+
+
+.. parsed-literal::
+
+    0.9796875
 
 

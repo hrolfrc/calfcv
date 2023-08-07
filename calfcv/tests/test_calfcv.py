@@ -55,6 +55,9 @@ def test_calf(data):
     assert X_r.shape[1] == 1
     assert X_r.shape[0] == len(y)
 
+    X_r = clf.fit_transform(X, y)
+    assert X_r.shape[1] == 1
+    assert X_r.shape[0] == len(y)
 
 
 # noinspection DuplicatedCode
@@ -74,5 +77,9 @@ def test_calfcv(data):
 
     # expect 1-2 informative features to be found
     X_r = clf.transform(X)
+    assert X_r.shape[1] == 1
+    assert X_r.shape[0] == len(y)
+
+    X_r = clf.fit_transform(X, y)
     assert X_r.shape[1] == 1
     assert X_r.shape[0] == len(y)

@@ -183,6 +183,7 @@ class Calf(ClassifierMixin, BaseEstimator):
             array([[1., 0.]])
 
         """
+
     def __init__(self, grid=(-1, 1), verbose=0):
         self.grid = [grid] if isinstance(grid, int) else grid
         self.verbose = verbose if isinstance(verbose, int) and verbose in [0, 1, 2, 3] else 0
@@ -212,8 +213,16 @@ class Calf(ClassifierMixin, BaseEstimator):
         start = time.time()
         self.auc_, self.w_ = fit_hv(X, y, grid=self.grid)
         self.fit_time_ = time.time() - start
-
         self.coef_ = self.w_
+
+        if self.verbose > 0:
+            print()
+            print('=======================================')
+            print('Coefficients ', self.coef_)
+            print('Max AUC', max(self.auc_))
+            print('Objective score', self.score(X, y))
+            print('Fit time', self.fit_time_)
+
         self.is_fitted_ = True
         return self
 

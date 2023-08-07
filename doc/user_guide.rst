@@ -1,6 +1,7 @@
 .. title:: User guide : contents
 
 .. _user_guide:
+
 User Guide
 ==========
 
@@ -128,12 +129,6 @@ Reproduce the AUC from example of the Calf paper [1]
 While calfpy yields an auc of 0.875 in example 1 from the paper, calfcv
 produces an auc of 0.9796875.
 
-=========== References:
-
-Jeffries, C.D., Ford, J.R., Tilson, J.L. et al. A greedy regression
-algorithm with coarse weights offers novel advantages. Sci Rep 12, 5440
-(2022). https://doi.org/10.1038/s41598-022-09415-2
-
 .. code:: ipython2
 
     input_file = "../../data/n2.csv"
@@ -244,3 +239,10 @@ CalfCV improves on the calfpy auc of 0.875 from example 1 of the paper.
     0.9796875
 
 
+
+References
+----------
+
+[1] Jeffries, C.D., Ford, J.R., Tilson, J.L. et al. A greedy regression
+algorithm with coarse weights offers novel advantages. Sci Rep 12, 5440
+(2022). https://doi.org/10.1038/s41598-022-09415-2

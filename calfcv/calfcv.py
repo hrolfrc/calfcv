@@ -295,6 +295,39 @@ class Calf(ClassifierMixin, BaseEstimator):
         class_prob = np.column_stack((1 - y_proba, y_proba))
         return class_prob
 
+    def transform(self, X):
+        """ Reduce X to the features that contribute positive AUC.
+
+        Arguments:
+            X : array-like, shape (n_samples, n_features)
+                The training input features and samples
+
+        Returns:
+            X_r : array of shape [n_samples, n_selected_features]
+            The input samples with only the selected features.
+
+        """
+        check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
+        X = check_array(X)
+
+        return X[:, np.asarray(self.coef_).nonzero()]
+
+    def fit_transform(self, X, y):
+        """ Fit to the data, then reduce X to the features that contribute positive AUC.
+
+            Arguments:
+                X : array-like, shape (n_samples, n_features)
+                    The training input features and samples
+
+                y : array-like of shape (n_samples,)
+
+            Returns:
+                X_r : array of shape [n_samples, n_selected_features]
+                The input samples with only the selected features.
+
+            """
+        return self.fit(X, y).transform(X)
+
     def _more_tags(self):
         return {
             'poor_score': True,
@@ -483,6 +516,37 @@ class CalfCV(ClassifierMixin, BaseEstimator):
         """
         check_is_fitted(self, ['is_fitted_', 'model_'])
         return self.model_.predict_proba(X)
+
+    def transform(self, X):
+        """ Reduce X to the features that contribute positive AUC.
+
+            Arguments:
+                X : array-like, shape (n_samples, n_features)
+                    The training input features and samples
+
+            Returns:
+                X_r : array of shape [n_samples, n_selected_features]
+                The input samples with only the selected features.
+
+            """
+        check_is_fitted(self, ['is_fitted_', 'model_'])
+        return self.model_.transform(X)
+
+    def fit_transform(self, X, y):
+        """ Fit to the data, then reduce X to the features that contribute positive AUC.
+
+            Arguments:
+                X : array-like, shape (n_samples, n_features)
+                    The training input features and samples
+
+                y : array-like of shape (n_samples,)
+
+            Returns:
+                X_r : array of shape [n_samples, n_selected_features]
+                The input samples with only the selected features.
+
+            """
+        return self.fit(X, y).model_.transform(X)
 
     def _more_tags(self):
         return {

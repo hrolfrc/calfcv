@@ -50,6 +50,12 @@ def test_calf(data):
     auc_p = roc_auc_score(y_true=y, y_score=y_score)
     assert numpy.round(auc_p, 2) == 0.9
 
+    # expect 1-2 informative features to be found
+    X_r = clf.transform(X)
+    assert X_r.shape[1] == 1
+    assert X_r.shape[0] == len(y)
+
+
 
 # noinspection DuplicatedCode
 def test_calfcv(data):
@@ -65,3 +71,8 @@ def test_calfcv(data):
 
     y_pred = clf.predict(X)
     assert y_pred.shape == (X.shape[0],)
+
+    # expect 1-2 informative features to be found
+    X_r = clf.transform(X)
+    assert X_r.shape[1] == 1
+    assert X_r.shape[0] == len(y)

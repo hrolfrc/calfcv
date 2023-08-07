@@ -28,7 +28,7 @@ Introduction
 ------------------
 This is a python implementation of the Coarse Approximation Linear Function (CALF). The implementation is based on the greedy forward selection algorithm described in the paper referenced below.
 
-Currently, CalfCV provides classification and prediction for two classes, the binomial case. Multinomial classification with more than two cases is not implemented.
+CalfCV provides classification and prediction for two classes, the binomial case. Multinomial classification with more than two cases is not implemented. CalfCV provides a transform method that can be used for feature selection and dimensionality reduction of data sets.
 
 The feature matrix is scaled to have zero mean and unit variance. Cross-validation is implemented to identify optimal score and coefficients. CalfCV is designed for use with scikit-learn_ pipelines and composite estimators.
 

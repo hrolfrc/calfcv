@@ -3,23 +3,10 @@ jobs:
   build_test:
     docker:
       - image: cimg/python:3.11.0
-    working_directory: ~/repo
     steps:
-      - checkout
+      - checkout # checkout source code to working directory
       - run:
-          name: install dependencies
-          command: |
-            wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-            chmod +x miniconda.sh && ./miniconda.sh -b -p ~/miniconda
-            export PATH="~/miniconda/bin:$PATH"
-            conda update --yes --quiet conda
-            conda create -n testenv --yes --quiet python=3
-            source activate testenv
-            conda install --yes pip numpy pandas scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
-            pip install sphinx-gallery
-            pip install .
-            cd doc
-            make html
+          command: | # create whl and use pipenv to install dependencies
             python3 setup.py sdist bdist_wheel
             sudo add-apt-repository universe -y
             sudo apt-get update
@@ -27,13 +14,9 @@ jobs:
             sudo pip install pipenv
             pipenv install dist/convsn-0.0.3-py3-none-any.whl
             pipenv install pytest
-      - store_artifacts:
-          path: doc/_build/html/
-          destination: doc
-      - store_artifacts:
-          path: ~/log.txt
-      - run: ls -ltrh doc/_build/html
-
+      - run:
+          command: | # Run test suite
+            pipenv run pytest
   test_pypi_publish:
     docker:
       - image: cimg/python:3.11.0

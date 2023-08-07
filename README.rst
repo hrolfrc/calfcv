@@ -2,8 +2,8 @@
 
 |CircleCI|_ |ReadTheDocs|_
 
-.. |CircleCI| image:: https://circleci.com/gh/hrolfrc/calfcv.svg?style=shield&circle-token=:circle-token
-.. _CircleCI: https://circleci.com/gh/hrolfrc/calfcv/tree/master
+.. |CircleCI| image:: https://circleci.com/gh/hrolfrc/calfcv.svg?style=shield
+.. _CircleCI: https://circleci.com/gh/hrolfrc/calfcv
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/calfcv/badge/?version=latest
 .. _ReadTheDocs: https://calfcv.readthedocs.io/en/latest/?badge=latest

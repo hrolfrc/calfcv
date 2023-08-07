@@ -195,6 +195,7 @@ class Calf(ClassifierMixin, BaseEstimator):
         Arguments:
             X : array-like, shape (n_samples, n_features)
                 The training input features and samples
+
             y : ground truth vector
 
         Returns:
@@ -273,14 +274,19 @@ class Calf(ClassifierMixin, BaseEstimator):
         return np.array(y_class)
 
     def predict_proba(self, X):
-        """ Identify the probability of each sample class label
+        """Probability estimates for samples in X.
 
-        Arguments:
-            X : array-like, shape (n_samples, n_features)
-                The training input features and samples
+        Parameters:
+
+            X : array-like of shape (n_samples, n_features)
+                Vector to be scored, where n_samples is the number of samples and
+                n_features is the number of features.
 
         Returns:
-            the class probabilities of X (n_samples)
+
+            T: array-like of shape (n_samples, n_classes)
+                Returns the probability of the sample for each class in the model,
+                where classes are ordered as they are in `self.classes_`.
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])

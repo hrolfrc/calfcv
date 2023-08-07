@@ -1,9 +1,8 @@
-version: 2
-
+version: 2.1
 jobs:
-  build:
+  build_test:
     docker:
-      - image: circleci/python:3.6.1
+      - image: cimg/python:3.11.0
     working_directory: ~/repo
     steps:
       - checkout
@@ -21,6 +20,13 @@ jobs:
             pip install .
             cd doc
             make html
+            python3 setup.py sdist bdist_wheel
+            sudo add-apt-repository universe -y
+            sudo apt-get update
+            sudo apt install -y python3-pip
+            sudo pip install pipenv
+            pipenv install dist/convsn-0.0.3-py3-none-any.whl
+            pipenv install pytest
       - store_artifacts:
           path: doc/_build/html/
           destination: doc
@@ -31,8 +37,49 @@ jobs:
       branches:
         ignore: gh-pages
 
+  test_pypi_publish:
+    docker:
+      - image: cimg/python:3.11.0
+    steps:
+      - checkout # checkout source code to working directory
+      - run:
+          command: | # create whl, install twine and publish to Test PyPI
+            python3 setup.py sdist bdist_wheel
+            sudo add-apt-repository universe -y
+            sudo apt-get update
+            sudo apt install -y python3-pip
+            sudo pip install pipenv
+            pipenv install twine
+            pipenv run twine upload --repository testpypi dist/*
+  pypi_publish:
+    docker:
+      - image: cimg/python:3.11.0
+    steps:
+      - checkout # checkout source code to working directory
+      - run:
+          command: | # create whl, install twine and publish to PyPI
+            python3 setup.py sdist bdist_wheel
+            sudo add-apt-repository universe -y
+            sudo apt-get update
+            sudo apt install -y python3-pip
+            sudo pip install pipenv
+            pipenv install twine
+            pipenv run twine upload dist/*
 workflows:
-  version: 2
-  workflow:
+  build_test_publish:
     jobs:
-      - build
+      - build_test
+      - test_pypi_publish:
+          requires:
+            - build_test
+          filters:
+            branches:
+              only:
+                - develop
+      - pypi_publish:
+          requires:
+            - build_test
+          filters:
+            branches:
+              only:
+                - main

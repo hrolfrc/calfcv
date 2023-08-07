@@ -20,6 +20,7 @@ jobs:
             pip install .
             cd doc
             make html
+            cd ..
             python3 setup.py sdist bdist_wheel
             sudo add-apt-repository universe -y
             sudo apt-get update

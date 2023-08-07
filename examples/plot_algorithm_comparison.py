@@ -4,8 +4,9 @@
 CalfCV comparison plot
 ===========================
 
-A classifier comparison plot including :class:`Calf` and :class:`CalfCV`,
-
+A classifier comparison plot including :class:`Calf` and :class:`CalfCV`.
+Using the grid [-2, 2] with :class:`Calf` improves performance by
+increasing the AUC mean and reducing variance.
 
 """
 import warnings
@@ -21,6 +22,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+
+import numpy as np
 
 from calfcv import Calf, CalfCV
 
@@ -44,6 +47,7 @@ X = scaler.fit_transform(X)
 models = [
     ('Calf', Calf()),
     ('CalfCV', CalfCV()),
+    ('Calf [-2, 2]', Calf(grid=np.arange(-2, 2, .1))),
     ('EN', ElasticNetCV()),
     ('LCV', LassoCV()),
     ('LR', LogisticRegression()),

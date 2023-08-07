@@ -4,7 +4,13 @@
 Compare Calf with LogisticRegression
 ================================================
 
-A comparison of LogisticRegression with and :class:`Calf`.
+A comparison of LogisticRegressionCV and :class:`Calf` over 20
+synthetic classification problems.  Using the grid [-2, 2] with
+increments of .1, :class:`Calf` improves upon :class:`Calf` over
+the default grid, and in some cases, surpasses LogisticRegressionCV.
+The histogram at the bottom of the plot shows mean and standard
+deviation of the difference between LogisticRegressionCV and
+:class:`Calf`.
 
 """
 
@@ -21,7 +27,8 @@ from calfcv import Calf
 
 methods = [
     ('Logit', LogisticRegressionCV()),
-    ('Calf', Calf())
+    ('Calf', Calf()),
+    ('Calf [-2, 2]', Calf(grid=np.arange(-2, 2, .1))),
 ]
 
 score = {}
@@ -55,19 +62,21 @@ for _ in range(20):
 # compare the mean of the differences of auc
 diff = np.subtract(score['Logit']['AUC'], score['Calf']['AUC'])
 df_describe = pd.DataFrame(diff)
-print(df_describe.describe())
 
 # plot the results
 fig, axs = plt.subplots(3, 1, layout='constrained')
 xdata = np.arange(len(score['Logit']['AUC']))
 axs[0].plot(xdata, score['Logit']['AUC'], label='LogisticRegressionCV')
 axs[0].plot(xdata, score['Calf']['AUC'], label='Calf')
+axs[0].plot(xdata, score['Calf [-2, 2]']['AUC'], label='Calf [-2, 2]')
+
 axs[0].set_title('Comparison of Calf and LogisticRegressionCV')
 axs[0].set_ylabel('AUC')
 axs[0].legend()
 
 axs[1].plot(xdata, score['Logit']['Accuracy'], label='LogisticRegressionCV')
 axs[1].plot(xdata, score['Calf']['Accuracy'], label='Calf')
+axs[1].plot(xdata, score['Calf [-2, 2]']['Accuracy'], label='Calf [-2, 2]')
 axs[1].set_ylabel('Accuracy')
 axs[1].legend()
 

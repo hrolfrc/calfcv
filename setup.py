@@ -50,7 +50,7 @@ INSTALL_REQUIRES = ['numpy', 'scipy', 'scikit-learn']
 CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Intended Audience :: Developers',
                'Topic :: Scientific/Engineering :: Artificial Intelligence',
-               'Development Status :: 2 - Pre-Alpha',
+               'Development Status :: 3 - Alpha',
                'License :: OSI Approved',
                'Topic :: Scientific/Engineering',
                'Operating System :: OS Independent',

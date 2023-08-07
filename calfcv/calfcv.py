@@ -116,17 +116,17 @@ def fit_hv(X, y, grid):
 class Calf(ClassifierMixin, BaseEstimator):
     """ Course approximation linear function
 
-        CalfCV fits a linear model with coefficients  w = (w1, ..., wp)
-        to maximize the AUC of the targets predicted by the linear function.
+    CalfCV fits a linear model with coefficients  w = (w1, ..., wp)
+    to maximize the AUC of the targets predicted by the linear function.
 
-        Parameters
-        ----------
+    Parameters
+    ----------
         grid : the search grid.  Default is (-1, 1).
 
         verbose : 0 is silent.  1-3 are increasingly verbose
 
-        Attributes
-        ----------
+    Attributes
+    ----------
         coef_ : array of shape (n_features, )
             Estimated coefficients for the linear fit problem.  Only
             one target should be passed, and this is a 1D array of length
@@ -144,43 +144,43 @@ class Calf(ClassifierMixin, BaseEstimator):
         fit_time_ : float
             The number of seconds to fit X to y
 
-        Notes
-        -----
+    Notes
+    -----
         The feature matrix must be centered at 0.  This can be accomplished with
         sklearn.preprocessing.StandardScaler, or similar.  No intercept is calculated.
 
-        Examples
-        --------
-            >>> import numpy
-            >>> from calfcv import Calf
-            >>> from sklearn.datasets import make_classification as mc
-            >>> X, y = mc(n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1, random_state=42)
-            >>> numpy.round(X[0:3, :], 2)
-            array([[ 1.23, -0.76],
-                   [ 0.7 , -1.38],
-                   [ 2.55,  2.5 ]])
+    Examples
+    --------
+        >>> import numpy
+        >>> from calfcv import Calf
+        >>> from sklearn.datasets import make_classification as mc
+        >>> X, y = mc(n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1, random_state=42)
+        >>> numpy.round(X[0:3, :], 2)
+        array([[ 1.23, -0.76],
+               [ 0.7 , -1.38],
+               [ 2.55,  2.5 ]])
 
-            >>> y[0:3]
-            array([0, 0, 1])
+        >>> y[0:3]
+        array([0, 0, 1])
 
-            >>> cls = CalfCV().fit(X, y)
-            >>> cls.score(X, y)
-            0.7
+        >>> cls = CalfCV().fit(X, y)
+        >>> cls.score(X, y)
+        0.7
 
-            >>> cls.best_coef_
-            [1, 1]
+        >>> cls.best_coef_
+        [1, 1]
 
-            >>> numpy.round(cls.best_score_, 2)
-            0.82
+        >>> numpy.round(cls.best_score_, 2)
+        0.82
 
-            >>> cls.fit_time_ > 0
-            True
+        >>> cls.fit_time_ > 0
+        True
 
-            >>> cls.predict(np.array([[3, 5]]))
-            array([0])
+        >>> cls.predict(np.array([[3, 5]]))
+        array([0])
 
-            >>> cls.predict_proba(np.array([[3, 5]]))
-            array([[1., 0.]])
+        >>> cls.predict_proba(np.array([[3, 5]]))
+        array([[1., 0.]])
 
         """
 
@@ -190,16 +190,20 @@ class Calf(ClassifierMixin, BaseEstimator):
         self.verbose = verbose if isinstance(verbose, int) and verbose in [0, 1, 2, 3] else 0
 
     def fit(self, X, y):
-        """ fit Calf to X and y
+        """ Fit the model according to the given training data.
 
-        Arguments:
-            X : array-like, shape (n_samples, n_features)
-                The training input features and samples
+        Parameters
+        ----------
+            X : {array-like, sparse matrix} of shape (n_samples, n_features)
+                Training vector, where n_samples is the number of samples and n_features is the number of features.
 
-            y : ground truth vector
+            y : array-like of shape (n_samples,)
+                Target vector relative to X.
 
-        Returns:
+        Returns
+        -------
             self
+                Fitted estimator.
 
         """
         if y is None:
@@ -231,12 +235,14 @@ class Calf(ClassifierMixin, BaseEstimator):
     def decision_function(self, X):
         """ Identify confidence scores for the samples
 
-        Arguments:
+        Parameters
+        ----------
             X : array-like, shape (n_samples, n_features)
                 The training input features and samples
 
-        Returns:
-            the decision vector (n_samples)
+        Returns
+        -------
+            y_d : the decision vector (n_samples)
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
@@ -251,14 +257,17 @@ class Calf(ClassifierMixin, BaseEstimator):
         return scores
 
     def predict(self, X):
-        """ Predict class labels for each sample
+        """Predict class labels for samples in X.
 
-        Arguments:
-            X : array-like, shape (n_samples, n_features)
-                The training input features and samples
+        Parameters
+        ----------
+            X : {array-like, sparse matrix} of shape (n_samples, n_features)
+                The data matrix for which we want to get the predictions.
 
-        Returns:
-            the class prediction of X (n_samples)
+        Returns
+        -------
+            y_pred : ndarray of shape (n_samples,)
+                Vector containing the class labels for each sample.
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
@@ -276,15 +285,15 @@ class Calf(ClassifierMixin, BaseEstimator):
     def predict_proba(self, X):
         """Probability estimates for samples in X.
 
-        Parameters:
-
+        Parameters
+        ----------
             X : array-like of shape (n_samples, n_features)
                 Vector to be scored, where n_samples is the number of samples and
                 n_features is the number of features.
 
-        Returns:
-
-            T: array-like of shape (n_samples, n_classes)
+        Returns
+        -------
+            T : array-like of shape (n_samples, n_classes)
                 Returns the probability of the sample for each class in the model,
                 where classes are ordered as they are in `self.classes_`.
 
@@ -304,13 +313,15 @@ class Calf(ClassifierMixin, BaseEstimator):
     def transform(self, X):
         """ Reduce X to the features that contribute positive AUC.
 
-        Arguments:
+        Parameters
+        ----------
             X : array-like, shape (n_samples, n_features)
                 The training input features and samples
 
-        Returns:
+        Returns
+        -------
             X_r : array of shape [n_samples, n_selected_features]
-            The input samples with only the selected features.
+                The input samples with only the selected features.
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
@@ -321,17 +332,20 @@ class Calf(ClassifierMixin, BaseEstimator):
     def fit_transform(self, X, y):
         """ Fit to the data, then reduce X to the features that contribute positive AUC.
 
-            Arguments:
-                X : array-like, shape (n_samples, n_features)
-                    The training input features and samples
+        Parameters
+        ----------
+            X : array-like, shape (n_samples, n_features)
+                The training input features and samples
 
-                y : array-like of shape (n_samples,)
+            y : array-like of shape (n_samples,)
+                Target vector relative to X.
 
-            Returns:
-                X_r : array of shape [n_samples, n_selected_features]
+        Returns
+        -------
+            X_r : array of shape [n_samples, n_selected_features]
                 The input samples with only the selected features.
 
-            """
+        """
         return self.fit(X, y).transform(X)
 
     def _more_tags(self):
@@ -351,36 +365,36 @@ class CalfCV(ClassifierMixin, BaseEstimator):
 
     Parameters
     ----------
-    grid : the search grid.  Default is (-1, 1).
+        grid : the search grid.  Default is (-1, 1).
 
-    verbose : 0 is silent.  1-3 are increasingly verbose
+        verbose : 0 is silent.  1-3 are increasingly verbose
 
     Attributes
     ----------
-    best_coef_ : array of shape (n_features, )
-        Estimated coefficients for the linear fit problem.  Only
-        one target should be passed, and this is a 1D array of length
-        n_features.
+        best_coef_ : array of shape (n_features, )
+            Estimated coefficients for the linear fit problem.  Only
+            one target should be passed, and this is a 1D array of length
+            n_features.
 
-    best_score_ : float
-        The best auc score over the cross validation
+        best_score_ : float
+            The best auc score over the cross validation
 
-    best_auc_ : array of shape (n_features, )
-        The cumulative auc by feature.
+        best_auc_ : array of shape (n_features, )
+            The cumulative auc by feature.
 
-    n_features_in_ : int
-        Number of features seen during :term:`fit`.
+        n_features_in_ : int
+            Number of features seen during :term:`fit`.
 
-    classes_ : list
-        The unique class labels
+        classes_ : list
+            The unique class labels
 
-    fit_time_ : float
-        The number of seconds to fit X to y
+        fit_time_ : float
+            The number of seconds to fit X to y
 
     Notes
     -----
-    Only one processor is used due to a bug caused by "Python’s multiprocessing that
-    does fork without exec". See, https://scikit-learn.org/stable/faq.html#id27
+        Only one processor is used due to a bug caused by "Python’s multiprocessing that
+        does fork without exec". See, https://scikit-learn.org/stable/faq.html#id27
 
     Examples
     --------
@@ -429,15 +443,20 @@ class CalfCV(ClassifierMixin, BaseEstimator):
         self.verbose = verbose if isinstance(verbose, int) and verbose in [0, 1, 2, 3] else 0
 
     def fit(self, X, y):
-        """ fit X and y
+        """ Fit the model according to the given training data.
 
-        Arguments:
-            X : array-like, shape (n_samples, n_features)
-                The training input features and samples.
-            y : ground truth vector
+        Parameters
+        ----------
+            X : {array-like, sparse matrix} of shape (n_samples, n_features)
+                Training vector, where n_samples is the number of samples and n_features is the number of features.
 
-        Returns:
+            y : array-like of shape (n_samples,)
+                Target vector relative to X.
+
+        Returns
+        -------
             self
+                Fitted estimator.
 
         """
 
@@ -484,40 +503,50 @@ class CalfCV(ClassifierMixin, BaseEstimator):
     def decision_function(self, X):
         """ Identify confidence scores for the samples
 
-        Arguments:
+        Parameters
+        ----------
             X : array-like, shape (n_samples, n_features)
                 The training input features and samples
 
-        Returns:
-            the decision vector (n_samples)
+        Returns
+        -------
+            y_d : the decision vector (n_samples)
 
         """
         check_is_fitted(self, ['is_fitted_', 'model_'])
         return self.model_.decision_function(X)
 
     def predict(self, X):
-        """ Predict class labels for each sample
+        """Predict class labels for samples in X.
 
-        Arguments:
-            X : array-like, shape (n_samples, n_features)
-                The training input features and samples
+        Parameters
+        ----------
+            X : {array-like, sparse matrix} of shape (n_samples, n_features)
+                The data matrix for which we want to get the predictions.
 
-        Returns:
-            the class prediction of X (n_samples)
+        Returns
+        -------
+            y_pred : ndarray of shape (n_samples,)
+                Vector containing the class labels for each sample.
 
         """
         check_is_fitted(self, ['is_fitted_', 'model_'])
         return self.model_.predict(X)
 
     def predict_proba(self, X):
-        """ Identify the probability of each sample class label
+        """Probability estimates for samples in X.
 
-        Arguments:
-            X : array-like, shape (n_samples, n_features)
-                The training input features and samples
+        Parameters
+        ----------
+            X : array-like of shape (n_samples, n_features)
+                Vector to be scored, where n_samples is the number of samples and
+                n_features is the number of features.
 
-        Returns:
-            the class probabilities of X (n_samples)
+        Returns
+        -------
+            T : array-like of shape (n_samples, n_classes)
+                Returns the probability of the sample for each class in the model,
+                where classes are ordered as they are in `self.classes_`.
 
         """
         check_is_fitted(self, ['is_fitted_', 'model_'])
@@ -526,32 +555,37 @@ class CalfCV(ClassifierMixin, BaseEstimator):
     def transform(self, X):
         """ Reduce X to the features that contribute positive AUC.
 
-            Arguments:
-                X : array-like, shape (n_samples, n_features)
-                    The training input features and samples
+        Parameters
+        ----------
+            X : array-like, shape (n_samples, n_features)
+                The training input features and samples
 
-            Returns:
-                X_r : array of shape [n_samples, n_selected_features]
+        Returns
+        -------
+            X_r : array of shape [n_samples, n_selected_features]
                 The input samples with only the selected features.
 
-            """
+        """
         check_is_fitted(self, ['is_fitted_', 'model_'])
         return self.model_.transform(X)
 
     def fit_transform(self, X, y):
         """ Fit to the data, then reduce X to the features that contribute positive AUC.
 
-            Arguments:
-                X : array-like, shape (n_samples, n_features)
-                    The training input features and samples
+        Parameters
+        ----------
+            X : array-like, shape (n_samples, n_features)
+                The training input features and samples
 
-                y : array-like of shape (n_samples,)
+            y : array-like of shape (n_samples,)
+                Target vector relative to X.
 
-            Returns:
-                X_r : array of shape [n_samples, n_selected_features]
+        Returns
+        -------
+            X_r : array of shape [n_samples, n_selected_features]
                 The input samples with only the selected features.
 
-            """
+        """
         return self.fit(X, y).model_.transform(X)
 
     def _more_tags(self):

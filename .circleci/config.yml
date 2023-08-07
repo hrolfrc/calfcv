@@ -33,9 +33,6 @@ jobs:
       - store_artifacts:
           path: ~/log.txt
       - run: ls -ltrh doc/_build/html
-    filters:
-      branches:
-        ignore: gh-pages
 
   test_pypi_publish:
     docker:

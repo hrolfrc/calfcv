@@ -26,7 +26,7 @@ from calfcv import Calf
 
 
 methods = [
-    ('Logit', LogisticRegressionCV()),
+    ('Logit', LogisticRegressionCV(max_iter=10000)),
     ('Calf', Calf()),
     ('Calf [-2, 2]', Calf(grid=np.arange(-2, 2, .1))),
 ]

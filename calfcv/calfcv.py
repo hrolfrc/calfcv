@@ -39,47 +39,6 @@ def predict(X, w):
     return np.sum(np.multiply(X, w), 1)
 
 
-def hv_candidate(X, y, w, c):
-    """ Find the auc of the weights augmented by the candidate vertex.
-
-    Arguments:
-        X : array-like, shape (n_samples, n_features)
-            The training input features and samples
-        y : ground truth vector
-        w : vetted weights
-        c : scalar candidate weight
-
-    Returns:
-        auc : the prediction AUC
-
-    """
-    assert X.shape[1] - 1 == len(w), "X or w have the wrong shape"
-    y_p = predict(X, w + [c])
-    try:
-        auc = roc_auc_score(y_true=y, y_score=y_p)
-    except ValueError:
-        auc = 0
-    return auc
-
-
-def hv_max(X, y, w, c):
-    """Find the weight in c that augments w to maximize auc
-
-    Arguments:
-        X : array-like, shape (n_samples, n_features)
-            The training input features and samples
-        y : ground truth vector
-        w : vetted weights
-        c : list of candidate weights
-
-    Returns:
-        (auc, v) : a tuple of auc at the best grid point v
-
-    """
-    res = [(hv_candidate(X, y, w, v), v) for v in c]
-    return sorted(res, reverse=True)[0]
-
-
 # noinspection PyAttributeOutsideInit,PyUnresolvedReferences
 def fit_hv(X, y, grid):
     """ Find the weights that best fit X using points from grid
@@ -94,22 +53,30 @@ def fit_hv(X, y, grid):
         auc, w : the weights that maximize auc, and the list of feature auc
 
     """
-    feature_range = range(X.shape[1])
-    w = []
+    weights = []
     auc = []
-    for i in feature_range:
-        X_c = X[:, 0:i + 1]
-
-        # granular approximation
-        max_auc, w_c = hv_max(X_c, y, w, grid)
+    U = np.empty((X.shape[0]))
+    for V in X.T:
+        candidates = []
+        for w in grid:
+            y_score = np.nan_to_num(U + V * w)
+            candidates.append(
+                (
+                    roc_auc_score(y_true=y, y_score=y_score),
+                    time.time(),  # sorted tie-breaker
+                    y_score,
+                    w
+                )
+            )
+        max_auc, _, U, w_c = sorted(candidates, reverse=True)[0]
 
         # if the auc goes down then we skip the feature by weighting it at 0
         if auc and max_auc <= max(auc):
-            w = w + [0]
+            weights = weights + [0]
         else:
-            w = w + [w_c]
+            weights = weights + [w_c]
         auc = auc + [max_auc]
-    return auc, w
+    return auc, weights
 
 
 # noinspection PyAttributeOutsideInit

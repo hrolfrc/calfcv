@@ -1,6 +1,11 @@
 """
 The Calf and CalfCV classifiers.
 
+===============================================================
+Author: Rolf Carlson, Carlson Research, LLC <hrolfrc@gmail.com>
+License: 3-clause BSD
+===============================================================
+
 Calf implements a Coarse Approximation Linear Function. [1]
 CalfCV optimizes weight selection through cross validation.
 

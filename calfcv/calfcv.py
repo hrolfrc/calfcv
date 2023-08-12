@@ -32,12 +32,14 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 def predict(X, w):
     """ Predict the classes from the weights and features
 
-    Arguments:
+    Parameters
+    ----------
         X : array-like, shape (n_samples, n_features)
             The training input features and samples
         w : weights
 
-    Returns:
+    Returns
+    -------
         y_pred : the prediction of the ground truth, y
 
     """
@@ -48,13 +50,15 @@ def predict(X, w):
 def fit_hv(X, y, grid):
     """ Find the weights that best fit X using points from grid
 
-    Arguments:
+    Parameters
+    ----------
         X : array-like, shape (n_samples, n_features)
             The training input features and samples.
         y : ground truth vector
         grid : a list or array of candidate weights
 
-    Returns:
+    Returns
+    -------
         auc, w : the weights that maximize auc, and the list of feature auc
 
     """

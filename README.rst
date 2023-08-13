@@ -9,7 +9,7 @@
 .. _ReadTheDocs: https://calfcv.readthedocs.io/en/latest/?badge=latest
 
 
-CalfCV
+Calf, CalfCV
 #####################################
 
 A binomial classifier that implements the Coarse Approximation Linear Function (CALF).
@@ -28,9 +28,9 @@ Introduction
 ------------------
 This is a python implementation of the Coarse Approximation Linear Function (CALF). The implementation is based on the greedy forward selection algorithm described in the paper referenced below.
 
-CalfCV provides classification and prediction for two classes, the binomial case. Multinomial classification with more than two cases is not implemented. CalfCV provides a transform method that can be used for feature selection and dimensionality reduction of data sets.
+Two classes are provided: Calf, and CalfCV.  Calf provides classification and prediction for two classes, the binomial case. Multinomial classification with more than two cases is not implemented. Calf provides a transform method that can be used for feature selection and dimensionality reduction of data sets.  Calf requires that the feature matrix be scaled to have zero mean and unit variance.  CalfCV provides the same functionality as Calf, but CalfCV includes built in data scaling and cross-validation.  Choose Calf over CalfCV if you are optimizing hyperparameters over a grid using cross-validation.
 
-The feature matrix is scaled to have zero mean and unit variance. Cross-validation is implemented to identify optimal score and coefficients. CalfCV is designed for use with scikit-learn_ pipelines and composite estimators.
+Both Calf and CalfCV are designed for use with scikit-learn_ pipelines and composite estimators.
 
 .. _scikit-learn: https://scikit-learn.org
 

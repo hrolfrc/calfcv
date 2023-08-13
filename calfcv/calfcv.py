@@ -19,12 +19,12 @@ Sci Rep 12, 5440 (2022). https://doi.org/10.1038/s41598-022-09415-2
 import time
 
 import numpy as np
+from scipy.special import expit
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import minmax_scale
+from sklearn.preprocessing import StandardScaler, minmax_scale
 from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
@@ -252,7 +252,7 @@ class Calf(ClassifierMixin, BaseEstimator):
         if len(self.classes_) < 2:
             y_class = self.y_
         else:
-            # and convert to [0, 1] classes.
+            # convert to [0, 1] classes.
             y_class = np.heaviside(self.decision_function(X), 0).astype(int)
             # get the class labels
             y_class = [self.classes_[x] for x in y_class]
@@ -272,17 +272,14 @@ class Calf(ClassifierMixin, BaseEstimator):
             T : array-like of shape (n_samples, n_classes)
                 Returns the probability of the sample for each class in the model,
                 where classes are ordered as they are in `self.classes_`.
+                To create the probabilities, calf uses the same expit (sigmoid)
+                function used by LogisticRegression in the binary case.
+                https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression:~:text=1.1.11.1.%20Binary%20Case
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
         X = check_array(X)
-
-        y_proba = np.array(
-            minmax_scale(
-                self.decision_function(X),
-                feature_range=(0, 1)
-            )
-        )
+        y_proba = expit(self.decision_function(X))
         class_prob = np.column_stack((1 - y_proba, y_proba))
         return class_prob
 

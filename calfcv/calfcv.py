@@ -85,6 +85,11 @@ def fit_hv(X, y, grid):
         else:
             weights = weights + [w_c]
         auc = auc + [max_auc]
+
+        # if the auc has exceeded 0.999 then stop.
+        if max(auc) >= 0.999:
+            break
+
     return auc, weights
 
 

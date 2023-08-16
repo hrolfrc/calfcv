@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install dependencies
+          name: install dependencies and make Read the Docs
           command: |  # checkout source code to working directory
             wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
             chmod +x miniconda.sh && ./miniconda.sh -b -p ~/miniconda
@@ -18,9 +18,6 @@ jobs:
             conda install --yes pip numpy pandas scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
             pip install sphinx-gallery
             pip install .
-      - run:
-          name: make Read the Docs
-          command: | 
             cd doc
             make html
       - run:
@@ -41,7 +38,7 @@ jobs:
       - checkout # checkout source code to working directory
       - run:
           name: create whl, install twine and publish to Test PyPI
-          command: | 
+          command: |
             python3 setup.py sdist bdist_wheel
             sudo add-apt-repository universe -y
             sudo apt-get update

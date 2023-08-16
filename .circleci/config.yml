@@ -14,7 +14,7 @@ jobs:
             export PATH="~/miniconda/bin:$PATH"
             conda update --yes --quiet conda
             conda create -n testenv --yes --quiet python=3
-            conda activate testenv
+            source activate testenv
             conda install --yes pip numpy pandas scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
             pip install sphinx-gallery
             pip install .

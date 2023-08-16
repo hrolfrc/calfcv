@@ -28,7 +28,10 @@ jobs:
       - run: ls -ltrh doc/_build/html
       - run:
           command: | # create whl and use pipenv to install dependencies
-            source activate testenv
+            conda update --yes --quiet conda
+            conda create -n testenv --yes --quiet python=3
+            conda activate testenv
+            conda install --yes pip numpy pandas scipy scikit-learn matplotlib
             python3 setup.py sdist bdist_wheel
             sudo add-apt-repository universe -y
             sudo apt-get update
@@ -47,7 +50,10 @@ jobs:
       - run:
           name: create whl, install twine and publish to Test PyPI
           command: |
-            source activate testenv
+            conda update --yes --quiet conda
+            conda create -n testenv --yes --quiet python=3
+            conda activate testenv
+            conda install --yes pip numpy pandas scipy scikit-learn matplotlib
             python3 setup.py sdist bdist_wheel
             sudo add-apt-repository universe -y
             sudo apt-get update
@@ -63,7 +69,10 @@ jobs:
       - run:
           name: create whl, install twine and publish to PyPI
           command: |
-            source activate testenv
+            conda update --yes --quiet conda
+            conda create -n testenv --yes --quiet python=3
+            conda activate testenv
+            conda install --yes pip numpy pandas scipy scikit-learn matplotlib
             python3 setup.py sdist bdist_wheel
             sudo add-apt-repository universe -y
             sudo apt-get update

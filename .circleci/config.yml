@@ -15,7 +15,7 @@ jobs:
             conda update --yes --quiet conda
             conda create -n testenv --yes --quiet python=3
             source activate testenv
-            conda install --yes pip numpy pandas scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow pytest
+            conda install --yes pip numpy pandas scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
             pip install sphinx-gallery
             pip install .
             cd doc
@@ -26,6 +26,18 @@ jobs:
       - store_artifacts:
           path: ~/log.txt
       - run: ls -ltrh doc/_build/html
+      - run:
+          command: | # create whl and use pipenv to install dependencies
+            python3 setup.py sdist bdist_wheel
+            sudo add-apt-repository universe -y
+            sudo apt-get update
+            sudo apt install -y python3-pip
+            sudo pip install pipenv
+            pipenv install dist/calfcv*py3-none-any.whl
+            pipenv install pytest
+      - run:
+          command: | # Run test suite
+            pipenv run pytest
   test_pypi_publish:
     docker:
       - image: cimg/python:3.11.0

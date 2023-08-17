@@ -12,6 +12,7 @@ The histogram at the bottom of the plot shows mean and standard
 deviation of the difference between LogisticRegressionCV and
 :class:`Calf`.
 
+Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>, License: 3-clause BSD
 """
 
 import numpy as np

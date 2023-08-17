@@ -8,6 +8,9 @@ A classifier comparison plot including :class:`Calf` and :class:`CalfCV`.
 Using the grid [-2, 2] with :class:`Calf` improves performance by
 increasing the AUC mean and reducing variance.
 
+Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>
+License: 3-clause BSD
+
 """
 import warnings
 

@@ -1,11 +1,11 @@
 """
 
-===========================
-CalfCV comparison plot
-===========================
+====================================
+Calf stacked LogisticRegression Plot
+====================================
 
-A classifier comparison plot including :class:`Calf` and :class:`CalfCV`.
-Using the grid [-2, 2] with :class:`Calf` improves performance by
+A classifier plot comparing LogisticRegression to :class:`Calf`
+stacked LogisticRegression.  Using the grid [-2, 2] with :class:`Calf` improves performance by
 increasing the AUC mean and reducing variance.
 
 Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>

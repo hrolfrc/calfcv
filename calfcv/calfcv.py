@@ -244,6 +244,11 @@ class Calf(ClassifierMixin, BaseEstimator):
         if y is None:
             raise ValueError('requires y to be passed, but the target y is None')
 
+        # if issparse(X) and not issparse(y):
+        #     y_s = csr_array(y)
+        # else:
+        #     y_s = y
+
         X, y = check_X_y(X, y, accept_sparse=True)
         self.n_features_in_ = X.shape[1]
         self.classes_ = unique_labels(y)
@@ -348,7 +353,7 @@ class Calf(ClassifierMixin, BaseEstimator):
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
-        X = check_array(X)
+        X = check_array(X, accept_sparse=True)
         y_proba = expit(self.decision_function(X))
         class_prob = np.column_stack((1 - y_proba, y_proba))
         return class_prob
@@ -503,23 +508,36 @@ class CalfCV(ClassifierMixin, BaseEstimator):
 
         """
 
-        X, y = check_X_y(X, y)
+        X, y = check_X_y(X, y, accept_sparse=True)
         self.X_ = X
         self.y_ = y
         self.n_features_in_ = X.shape[1]
         self.classes_ = unique_labels(y)
 
-        self.model_ = GridSearchCV(
-            estimator=Pipeline(
-                steps=[
-                    ('scaler', StandardScaler()),
-                    ('classifier', Calf())
-                ]
-            ),
-            param_grid={'classifier__grid': [self.grid]},
-            scoring="roc_auc",
-            verbose=self.verbose
-        )
+        if issparse(X):
+            # scaling the data makes the matrix dense
+            self.model_ = GridSearchCV(
+                estimator=Pipeline(
+                    steps=[
+                        ('classifier', Calf())
+                    ]
+                ),
+                param_grid={'classifier__grid': [self.grid]},
+                scoring="roc_auc",
+                verbose=self.verbose
+            )
+        else:
+            self.model_ = GridSearchCV(
+                estimator=Pipeline(
+                    steps=[
+                        ('scaler', StandardScaler()),
+                        ('classifier', Calf())
+                    ]
+                ),
+                param_grid={'classifier__grid': [self.grid]},
+                scoring="roc_auc",
+                verbose=self.verbose
+            )
 
         # fit and time
         start = time.time()

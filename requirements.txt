@@ -13,5 +13,3 @@ sphinx-gallery
 sphinx_rtd_theme
 numpydoc
 pandas
-pip
-  - nbsphinx

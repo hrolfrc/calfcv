@@ -5,8 +5,8 @@ Calf stacked LogisticRegression Plot
 ====================================
 
 A classifier plot comparing LogisticRegression to :class:`Calf`
-stacked LogisticRegression.  Using the grid [-2, 2] with :class:`Calf` improves performance by
-increasing the AUC mean and reducing variance.
+stacked LogisticRegression. Stacking with Calf increases the mean AUC
+and can reduce variance.
 
 Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>
 License: 3-clause BSD

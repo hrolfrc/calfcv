@@ -13,14 +13,15 @@ This project develops the CalfCV classifier.
    :hidden:
    :caption: Getting Started
 
-   quick_start
+   notebooks/quick_start
 
 .. toctree::
    :maxdepth: 2
    :hidden:
    :caption: Documentation
 
-   user_guide
+   notebooks/user_guide
+
    api
 
 .. toctree::
@@ -29,6 +30,8 @@ This project develops the CalfCV classifier.
    :caption: Tutorial - Examples
 
    auto_examples/index
+   notebooks/calf_paper_example_1
+   notebooks/sparse_sentiment
 
 `Getting started <quick_start.html>`_
 -------------------------------------

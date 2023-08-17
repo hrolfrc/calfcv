@@ -19,6 +19,7 @@ Sci Rep 12, 5440 (2022). https://doi.org/10.1038/s41598-022-09415-2
 import time
 
 import numpy as np
+from scipy.sparse import issparse, csr_array
 from scipy.special import expit
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import roc_auc_score
@@ -43,8 +44,59 @@ def predict(X, w):
         y_pred : the prediction of the ground truth, y
 
     """
-    return np.sum(np.multiply(X, w), 1)
+    if issparse(X):
+        Z = X.multiply(csr_array(w))
+        y_pred = Z.sum(1).flatten().tolist()[0]
+    else:
+        y_pred = np.sum(X * w, 1)
+    return y_pred
 
+
+def fit_hv_sparse(X, y, grid):
+    """ Find the weights that best fit sparse X using points from grid
+
+    Parameters
+    ----------
+        X : sparse array, shape (n_samples, n_features)
+            The training input features and samples.
+        y : ground truth vector
+        grid : a list or array of candidate weights
+
+    Returns
+    -------
+        auc, w : the weights that maximize auc, and the list of feature auc
+
+    """
+    weights = []
+    auc = []
+    index = []
+    U = X.getcol(0) * 0  # zero column with the correct shape
+    for i in range(X.shape[1]):
+        V = X.getcol(i)
+        candidates = []
+        for w in grid:
+            Z = U + V * w
+            y_score = np.nan_to_num(Z.toarray().ravel())
+            candidates.append(
+                (
+                    roc_auc_score(y_true=y, y_score=y_score),
+                    time.time(),    # sorted tie-breaker
+                    Z,              # maintain sparse representation
+                    w               # candidate weight
+                )
+            )
+        max_auc, _, U, w_c = sorted(candidates, reverse=True)[0]
+
+        if not auc or max_auc > max(auc):
+            weights = weights + [w_c]
+            index = index + [i]
+        auc = auc + [max_auc]
+
+        # if the auc has exceeded 0.999 then stop.
+        if max(auc) >= 0.999:
+            break
+
+    return auc, weights, index
 
 # noinspection PyAttributeOutsideInit,PyUnresolvedReferences
 def fit_hv(X, y, grid):
@@ -64,8 +116,10 @@ def fit_hv(X, y, grid):
     """
     weights = []
     auc = []
+    index = []
     U = np.empty((X.shape[0]))
-    for V in X.T:
+    for i in range(X.shape[1]):
+        V = X[:, i]
         candidates = []
         for w in grid:
             y_score = np.nan_to_num(U + V * w)
@@ -79,18 +133,18 @@ def fit_hv(X, y, grid):
             )
         max_auc, _, U, w_c = sorted(candidates, reverse=True)[0]
 
-        # if the auc goes down then we skip the feature by weighting it at 0
-        if auc and max_auc <= max(auc):
-            weights = weights + [0]
-        else:
+        if not auc or max_auc > max(auc):
             weights = weights + [w_c]
+            index = index + [i]
+
+        # the auc measures the best contribution from each feature
         auc = auc + [max_auc]
 
         # if the auc has exceeded 0.999 then stop.
         if max(auc) >= 0.999:
             break
 
-    return auc, weights
+    return auc, weights, index
 
 
 # noinspection PyAttributeOutsideInit
@@ -190,7 +244,7 @@ class Calf(ClassifierMixin, BaseEstimator):
         if y is None:
             raise ValueError('requires y to be passed, but the target y is None')
 
-        X, y = check_X_y(X, y)
+        X, y = check_X_y(X, y, accept_sparse=True)
         self.n_features_in_ = X.shape[1]
         self.classes_ = unique_labels(y)
         self.X_ = X
@@ -198,14 +252,24 @@ class Calf(ClassifierMixin, BaseEstimator):
 
         # fit and time the fit
         start = time.time()
-        self.auc_, self.w_ = fit_hv(X, y, grid=self.grid)
+        # the feature_index is the index of features with non-zero weights
+        # the weights is the set of non-zero weights for features indexed by the feature_index
+        # the feature index is used for slicing feature columns to achieve dimensionality
+        # reduction when multiplying against the weights.
+        if issparse(X):
+            self.auc_, self.weights_, self.feature_index_ = fit_hv_sparse(X, y, grid=self.grid)
+        else:
+            self.auc_, self.weights_, self.feature_index_ = fit_hv(X, y, grid=self.grid)
         self.fit_time_ = time.time() - start
-        self.coef_ = self.w_
+
+        # expand to get coefficients
+        self.coef_ = [0] * X.shape[1]
+        for i, w in zip(self.feature_index_, self.weights_):
+            self.coef_[i] = w
 
         if self.verbose > 0:
-            print()
             print('=======================================')
-            print('Coefficients ', self.coef_)
+            print('Coefficients ', self.weights_)
             print('Max AUC', max(self.auc_))
             print('Objective score', self.score(X, y))
             print('Fit time', self.fit_time_)
@@ -229,9 +293,10 @@ class Calf(ClassifierMixin, BaseEstimator):
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
 
         X = self._validate_data(X, accept_sparse="csr", reset=False)
+
         scores = np.array(
             minmax_scale(
-                predict(X, self.w_),
+                predict(X[:, self.feature_index_], self.weights_),
                 feature_range=(-1, 1)
             )
         )
@@ -252,7 +317,7 @@ class Calf(ClassifierMixin, BaseEstimator):
 
         """
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
-        X = check_array(X)
+        X = self._validate_data(X, accept_sparse="csr", reset=False)
 
         if len(self.classes_) < 2:
             y_class = self.y_
@@ -305,7 +370,7 @@ class Calf(ClassifierMixin, BaseEstimator):
         check_is_fitted(self, ['is_fitted_', 'X_', 'y_'])
         X = check_array(X)
 
-        return X[:, np.asarray(self.coef_).nonzero()]
+        return X[:, self.feature_index_]
 
     def fit_transform(self, X, y):
         """ Fit to the data, then reduce X to the features that contribute positive AUC.

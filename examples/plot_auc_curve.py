@@ -8,6 +8,8 @@ curve for :class:`CalfCV` on the breast cancer dataset.
 When a feature is considered and the auc declines, that feature is dismissed by receiving
 a weight of zero. The labels above the plot line are the feature weights.
 
+Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>, License: 3-clause BSD
+
 """
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_breast_cancer

@@ -8,7 +8,7 @@ A classifier plot comparing LogisticRegression to :class:`Calf`
 stacked LogisticRegression. Stacking with Calf increases the mean AUC
 and can reduce variance.
 
-Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>
+Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>,
 License: 3-clause BSD
 
 """

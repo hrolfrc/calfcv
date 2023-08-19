@@ -16,7 +16,7 @@ jobs:
             conda create -n testenv --yes --quiet python=3
             source activate testenv
             conda install --yes pip numpy pandas scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow pandoc
-            pip install sphinx-gallery nbsphinx
+            pip install sphinx-gallery nbsphinx calfpy
             pip install .
             cd doc
             make html

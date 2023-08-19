@@ -30,8 +30,10 @@ This project develops the CalfCV classifier.
    :caption: Tutorial - Examples
 
    auto_examples/index
-   notebooks/calf_paper_example_1
    notebooks/sparse_sentiment
+   notebooks/calf_paper_example_1
+   notebooks/forest_importances
+   notebooks/calf_auc_lasso_example
 
 `Getting started <quick_start.html>`_
 -------------------------------------

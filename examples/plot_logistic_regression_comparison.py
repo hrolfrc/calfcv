@@ -39,13 +39,13 @@ for desc, _ in methods:
     score[desc]['Accuracy'] = []
 
 rng = np.random.RandomState(11)
-for _ in range(20):
+for _ in range(10):
     # Make a classification problem
     X, y_d = make_classification(
-        n_samples=200,
-        n_features=40,
-        n_informative=10,
-        n_redundant=5,
+        n_samples=50,
+        n_features=4,
+        n_informative=2,
+        n_redundant=2,
         n_classes=2,
         hypercube=True,
         random_state=rng

@@ -65,8 +65,7 @@ EXTRAS_REQUIRE = {
         'sphinx-gallery',
         'sphinx_rtd_theme',
         'numpydoc',
-        'matplotlib',
-        'calfpy'
+        'matplotlib'
     ]
 }
 

@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@3.2.5
 jobs:
   build_test:
     docker:
@@ -36,6 +38,12 @@ jobs:
       - run: ls -ltrh doc/_build/html
 workflows:
   version: 2
+  # See the codecov guide:
+  # https://circleci.com/developer/orbs/orb/codecov/codecov
+  upload-to-codecov:
+    jobs:
+      - checkout
+      - codecov/upload
   workflow:
     jobs:
       - build_test

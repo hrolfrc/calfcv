@@ -1,4 +1,4 @@
-.. project-template documentation master file, created by
+.. calfcv documentation master file, created by
    sphinx-quickstart on Mon Jan 18 14:44:12 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -30,10 +30,23 @@ This project develops the CalfCV classifier.
    :caption: Tutorial - Examples
 
    auto_examples/index
-   notebooks/sparse_sentiment
-   notebooks/calf_paper_example_1
-   notebooks/forest_importances
-   notebooks/calf_auc_lasso_example
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Studies - Text
+
+   notebooks/text_analysis/sentiment_imdb
+   notebooks/text_analysis/classify_newsgroups
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Studies - N2 dataset
+
+   notebooks/n2/calf_paper_example_1
+   notebooks/n2/forest_importances
+   notebooks/n2/calf_auc_lasso_example
 
 `Getting started <quick_start.html>`_
 -------------------------------------

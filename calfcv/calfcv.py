@@ -353,8 +353,8 @@ class Calf(ClassifierMixin, BaseEstimator):
         >>> cls.predict(np.array([[3, 5]]))
         array([0])
 
-        >>> cls.predict_proba(np.array([[3, 5]]))
-        array([[1., 0.]])
+        >>> np.round(cls.predict_proba(np.array([[3, 5]])), 2)
+        array([[0.73, 0.27]])
 
         """
 
@@ -636,15 +636,23 @@ class CalfCV(ClassifierMixin, BaseEstimator):
         >>> cls.predict(np.array([[3, 5]]))
         array([0])
 
-        >>> cls.predict_proba(np.array([[3, 5]]))
-        array([[1., 0.]])
+        >>> np.round(cls.predict_proba(np.array([[3, 5]])), 2)
+        array([[0.73, 0.27]])
 
     """
 
-    def __init__(self, grid=(-1, 1), verbose=0):
-        """ Initialize CalfCV"""
+    def __init__(
+            self,
+            grid=(-1, 1),
+            auc_tol=1e-6,
+            order_col=False,
+            verbose=False
+    ):
+        """ Initialize Calf"""
         self.grid = [grid] if isinstance(grid, int) else grid
-        self.verbose = verbose  # if isinstance(verbose, int) and verbose in [0, 1, 2, 3] else 0
+        self.auc_tol = auc_tol
+        self.order_col = order_col
+        self.verbose = verbose
 
     def fit(self, X, y):
         """ Fit the model according to the given training data.
@@ -670,6 +678,13 @@ class CalfCV(ClassifierMixin, BaseEstimator):
         self.n_features_in_ = X.shape[1]
         self.classes_ = unique_labels(y)
 
+        parameter_grid = {
+            'classifier__grid': [self.grid],
+            'classifier__auc_tol': [self.auc_tol],
+            'classifier__order_col': [self.order_col],
+            'classifier__verbose': [self.verbose]
+        }
+
         if issparse(X):
             # scaling the data makes the matrix dense
             self.model_ = GridSearchCV(
@@ -678,7 +693,7 @@ class CalfCV(ClassifierMixin, BaseEstimator):
                         ('classifier', Calf())
                     ]
                 ),
-                param_grid={'classifier__grid': [self.grid]},
+                param_grid=parameter_grid,
                 scoring="roc_auc",
                 verbose=self.verbose
             )
@@ -690,7 +705,7 @@ class CalfCV(ClassifierMixin, BaseEstimator):
                         ('classifier', Calf())
                     ]
                 ),
-                param_grid={'classifier__grid': [self.grid]},
+                param_grid=parameter_grid,
                 scoring="roc_auc",
                 verbose=self.verbose
             )

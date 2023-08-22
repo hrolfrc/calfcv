@@ -8,8 +8,11 @@ A classifier runtime comparison plot including :class:`Calf`.
 Lasso is much faster than LogisticRegression, which in turn is faster than Calf.
 The calculation of AUC dominates the Calf runtime.
 
-Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>, License: 3-clause BSD
 """
+
+# Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>
+# License: 3-clause BSD
+
 import time
 
 import matplotlib.pyplot as plt

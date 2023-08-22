@@ -13,8 +13,10 @@ The example plot of :class:`CalfCV` shows that while
 nearest neighbors does better than CalfCV on all three data sets, CalfCV is
 competitive with linear SVM on the moons and circles data sets.
 
-Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>, License: 3-clause BSD
 """
+
+# Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>
+# License: 3-clause BSD
 
 import matplotlib.pyplot as plt
 import numpy as np

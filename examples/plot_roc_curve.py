@@ -7,8 +7,11 @@ An example plot of the Receiver Operating Characteristic (ROC)
 curve for :class:`CalfCV` on the breast cancer dataset.  We want an area under the
 curve (AUC) that is near 1.
 
-Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>, License: 3-clause BSD
 """
+
+# Author: Rolf Carlson, Carlson Research LLC, <hrolfrc@gmail.com>
+# License: 3-clause BSD
+
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_breast_cancer
 from sklearn.metrics import RocCurveDisplay

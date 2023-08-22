@@ -391,11 +391,6 @@ class Calf(ClassifierMixin, BaseEstimator):
         if y is None:
             raise ValueError('requires y to be passed, but the target y is None')
 
-        # if issparse(X) and not issparse(y):
-        #     y_s = csr_array(y)
-        # else:
-        #     y_s = y
-
         X, y = check_X_y(X, y, accept_sparse=True)
         self.n_features_in_ = X.shape[1]
         self.classes_ = unique_labels(y)
@@ -420,7 +415,11 @@ class Calf(ClassifierMixin, BaseEstimator):
                 verbose=self.verbose
             )
         else:
-            self.auc_, self.weights_, self.feature_index_ = fit_hv(X, y, grid=self.grid, verbose=self.verbose)
+            self.auc_, self.weights_, self.feature_index_ = fit_hv(
+                X, y,
+                grid=self.grid,
+                verbose=self.verbose
+            )
         self.fit_time_ = time.time() - start
 
         # expand to get coefficients

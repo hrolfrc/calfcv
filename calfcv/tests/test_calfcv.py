@@ -81,7 +81,7 @@ def test_calf_sparse(sparse_data):
     assert hasattr(clf, 'y_')
 
     assert clf.auc_ == [0.5, 0.875, 1.0]
-    assert clf.coef_ == [1, 1, -1]
+    assert clf.coef_ == [1, 1, -1, 0, 0, 0, 0, 0, 0, 0]
 
     y_pred = clf.predict(X)
     print(y_pred)
@@ -165,9 +165,9 @@ def test_calfcv(data):
 
     # expect 1-2 informative features to be found
     X_r = clf.transform(X)
-    assert X_r.shape[1] == 1
+    assert X_r.shape[1] == 3
     assert X_r.shape[0] == len(y)
 
     X_r = clf.fit_transform(X, y)
-    assert X_r.shape[1] == 1
+    assert X_r.shape[1] == 3
     assert X_r.shape[0] == len(y)

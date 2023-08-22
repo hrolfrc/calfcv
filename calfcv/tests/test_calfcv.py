@@ -84,14 +84,7 @@ def test_calf_sparse(sparse_data):
     assert clf.coef_ == [1, 1, -1, 0, 0, 0, 0, 0, 0, 0]
 
     y_pred = clf.predict(X)
-    print(y_pred)
-    # assert y_pred.shape == (X.shape[0],)
-
-    # assert all(y == [1, 0, 1, 0])
-    #
-    # # Get the prediction
-    # y_score = numpy.round(clf.fit(X, y).predict(X), 2)
-    # assert y_score == 0.7
+    assert y_pred.shape == (X.shape[0],)
 
 
 @pytest.fixture

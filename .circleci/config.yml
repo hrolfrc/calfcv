@@ -43,14 +43,11 @@ jobs:
       - store_artifacts:
           path: ~/log.txt
       - run: ls -ltrh doc/_build/html
+      # See the codecov guide:
+      # https://circleci.com/developer/orbs/orb/codecov/codecov
+      - codecov/upload
 workflows:
-  version: 2.1
-  # See the codecov guide:
-  # https://circleci.com/developer/orbs/orb/codecov/codecov
-  upload-to-codecov:
-      jobs:
-        - checkout
-        - codecov/upload
+  version: 2
   workflow:
     jobs:
       - build_test

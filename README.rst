@@ -1,9 +1,6 @@
 .. -*- mode: rst -*-
 
-|Codecov|_ |CircleCI|_ |ReadTheDocs|_
-
-.. |Codecov| image:: https://codecov.io/gh/hrolfrc/calfcv/branch/master/graph/badge.svg?style=shield
-.. _Codecov: https://codecov.io/gh/hrolfrc/calfcv
+|CircleCI|_ |ReadTheDocs|_
 
 .. |CircleCI| image:: https://circleci.com/gh/hrolfrc/calfcv.svg?style=shield
 .. _CircleCI: https://circleci.com/gh/hrolfrc/calfcv
